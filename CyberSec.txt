@@ -1,0 +1,139 @@
+@Router access list
+conf t
+no access-list 1
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 deny 10._.0.0 0.0.255.255
+access-list 1 permit any
+int gi 0/0/1
+ip access-group 1 in
+end
+
+@router access list 2
+conf t
+no access-list 2
+access-list 2 deny 10.41.0.0 0.0.255.255
+access-list 2 deny 10.42.0.0 0.0.255.255
+access-list 2 deny 10.51.0.0 0.0.255.255
+access-list 2 deny 10.52.0.0 0.0.255.255
+access-list 2 deny 10.61.0.0 0.0.255.255
+access-list 2 deny 10.62.0.0 0.0.255.255
+access-list 2 permit any
+int gi 0/0/1
+ip access-group 2 in
+end
+
+@router access list 3
+conf t
+no access-list 3
+access-list 3 deny 10.31.0.0 0.0.255.255
+access-list 3 deny 10.32.0.0 0.0.255.255
+access-list 3 deny 10.41.0.0 0.0.255.255
+access-list 3 deny 10.42.0.0 0.0.255.255
+access-list 3 deny 10.51.0.0 0.0.255.255
+access-list 3 deny 10.52.0.0 0.0.255.255
+access-list 3 deny 10.61.0.0 0.0.255.255
+access-list 3 deny 10.62.0.0 0.0.255.255
+access-list 3 permit any
+int gi 0/0/1
+ip access-group 3 in
+end
+
+@router access list only 2
+
+conf t
+no access-list 4
+access-list 4 permit 10.11.0.0 0.0.255.255
+!!!access-list 4 4 deny any <-- auto kabit
+int gi 0/0/1
+ip access-group 4 in
+end
+
+@remove access list
+conf t
+int gi 0/0/1
+no ip access-group 4 in
+end
+
+@CMD
+telnet 200.0.0.k
+
+
+Lab exam: allow only your network to telnet your EDGE
+@Edge
+conf t
+no access-list 5
+access-list 5 permit 10.12.0.0 0.0.255.255
+line vty 0 14
+access-class 5 in
+do sh ip access-list 5
+end
+
+@@ tcp, upd, icmp, ip
+@CUCM - Access list 6 line policy
+conf t
+no ip access-list extended FW1
+ip access-list extended FW1
+permit tcp any host cm eq 80
+permit tcp any host cm eq 443
+permit tcp any host cm eq 2000
+permit tcp any host cm2 eq 22
+permit tcp any host cm2 eq 53
+permit icmp any host cm2
+int fa 0/0
+ip access-group FW1 in
+do sh ip access-list FW1
+
+release policy
+conf t
+int fa 0/0
+no ip access-group FW3 in
+do sh ip access-list FW3
+
+@@@access list
+conf t
+no ip access-list extended FW2
+ip access-list extended FW2
+permit tcp any host cm eq 22
+permit tcp any host cm eq 23
+permit icmp any host cm
+permit tcp any host cm2 eq 2000
+permit tcp any host cm2 eq 80
+permit tcp any host cm2 eq 79
+int fa 0/0
+ip access-group FW2 in
+do sh ip access-list FW2
+
+@@@Ex 3
+conf t
+no ip access-list extended FW3
+ip access-list extended FW3
+deny tcp any host cm eq 22
+deny tcp any host cm eq 80
+deny tcp any host cm eq 443
+deny tcp any host cm2 eq 13
+deny tcp any host cm2 eq 19
+deny tcp any host cm2 eq 53
+permit ip any any
+int fa 0/0
+ip access-group FW3 in
+do sh ip access-list FW3
+
+@@ex 4
+!!cm - Block ping, http, dns, ssh
+!!cm2 - Block all
+conf t
+no ip access-list extended FW4
+ip access-list extended FW4
+deny icmp any host cm
+deny tcp any host cm eq 80
+deny tcp any host cm eq 53
+deny tcp any host cm eq 23
+permit ip any host cm
+deny ip any host cm2
+int fa 0/0
+ip access-group FW4 in
+do sh ip access-list FW4
