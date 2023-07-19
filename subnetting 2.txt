@@ -1,0 +1,50 @@
+@d1
+int vlan 250
+no shut
+ip add 10.0.16.1 255.255.248.0
+ip dhcp pool webserver
+network 10.0.0.8 255.255.255.248
+default-router 10.0.0.9
+!!
+ip dhcp pool 12dnsserver
+ network 10.0.0.8 255.255.255.240
+ default-router 10.0.8.1
+!!
+ip dhcp pool 1200sykescebu
+ network 10.0.8.0 255.255.248.0
+ default- router 10.0.8.1
+int e 1/0 
+swi port mode acc
+switch access vlan 12
+@D2
+config t
+switc mode access
+switch access vlan 5
+
+@a1
+config t
+swi mode access
+switch access vlan 120
+
+@2
+conf t
+int e 1/0
+switch mode access
+switch access vlan 250
+
+@p1, p2, s1, s2 -- Penge IP Mr. DHCP
+
+config t
+int e 1/0
+ip add dhcp
+no shut
+do sh ip int bri | ex una
+
+@p1
+conf t
+int e 0/0
+ip add dhcp
+no shut
+do sh ip int bri | ex una
+
+

@@ -1,0 +1,63 @@
+VPN
+
+VMWARE
+
+CSRV 1000 drive d rivan apps
+
+network adapter 1-nat
+network adapter 2-vmnet 2
+network adapter 3-vmnet 3
+
+
+
+JAPAN
+config t 
+int gi 2
+192.168.102.101 255.255.255.0
+no shut
+
+PH
+config t 
+int gi 2
+192.168.102.102 255.255.255.0
+no shut
+
+@@THEN LAGAY SA SECURE CRT
+TELNET
+
+admin
+password
+
+
+
+@VPNJP:
+config T
+no logging console
+no ip domain-lookup
+int gi 1
+ip add 192.168.108.101 255.255.255.0
+no shut
+int gi3
+ip add 10.10.10.1 255.255.255.0
+no shut
+@VPNphp:
+config T
+no logging console
+no ip domain-lookup
+int gi 1
+ip add 192.168.108.102 255.255.255.0
+no shut
+int gi3
+ip add 10.20.20.1 255.255.255.0
+no shut
+
+
+#####
+sh ip int brief check the IP dapat tatlo
+
+
+THEN LAGAY IP ADD SA OPERA
+
+
+
+
