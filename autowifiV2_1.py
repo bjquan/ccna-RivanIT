@@ -1,7 +1,7 @@
 import telnetlib
 import json
 
-with open('autowifi.json') as f:
+with open('wifiBilly.json') as f:
     data = json.load(f)
 
 for entry in data['aironet']:
@@ -9,7 +9,7 @@ for entry in data['aironet']:
     username = entry['username']
     password = entry['password']
     hostname = entry['hostname']
-    ssid = entry['ssid']
+    ssid = entry['SSID']
     authen = entry['authentication']
     keyman = entry['key-man']
     wifipass = entry['wifi-pass']
@@ -28,8 +28,8 @@ for entry in data['aironet']:
         tn.read_until(b"Password: ")
         tn.write(password.encode('ascii') + b"\n")
 
-    # tn.write(b"enable\n")
-    # tn.write(b"pass\n")
+    tn.write(b"enable\n")
+    tn.write(b"pass\n")
     tn.write(b"conf t\n")
     tn.write(b"hostname " + hostname.encode('ascii') + b"\n")
     tn.write(b"Dot11 ssid " + ssid.encode('ascii') + b"\n")
